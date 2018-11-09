@@ -18,7 +18,7 @@ export const handleInputChange = (event, currenciesData, convertedValues) => {
   };
 };
 
-export const handleConversion = (
+const handleConversion = (
   targetCurrency,
   targetValue,
   currenciesData,

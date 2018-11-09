@@ -5,7 +5,7 @@ import { saveDataToFirebase } from './firebase';
 
 const BASE_URL = 'http://data.fixer.io/api/';
 const API_KEY = process.env.REACT_APP_FIXER_API_KEY;
-const CURRENCIES = ['USD', 'SEK', 'ARS', 'COP'];
+const CURRENCIES = ['USD', 'SEK', 'ARS', 'COP', 'NOK'];
 
 const fetchDataFromFixerStart = () => {
   return {
