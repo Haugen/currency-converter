@@ -5,7 +5,6 @@ import { saveDataToFirebase } from './firebase';
 
 const BASE_URL = 'http://data.fixer.io/api/';
 const API_KEY = process.env.REACT_APP_FIXER_API_KEY;
-// const BASE_CURRENCY = 'USD'; // Can't change base currency with my current plan.
 const CURRENCIES = ['USD', 'SEK', 'ARS', 'COP'];
 
 const fetchDataFromFixerStart = () => {
@@ -39,7 +38,7 @@ export const tryFetchDataFromFixer = () => {
         )}`
       )
       .then(response => {
-        saveDataToFirebase(response.data);
+        dispatch(saveDataToFirebase(response.data));
         dispatch(fetchDataFromFixerSuccess(response.data));
       })
       .catch(error => {

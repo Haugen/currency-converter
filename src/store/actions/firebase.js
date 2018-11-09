@@ -41,22 +41,18 @@ export const tryFetchDataFromFirebase = () => {
     axios
       .get(FIREBASE_BASE_URL + '/currency-data.json')
       .then(response => {
-        const currencyData = response.data ? response.data : null;
+        const currencyData = response.data;
 
         if (currencyData) {
           const minutesSinceLastFetch =
             (Date.now() - currencyData.timestamp * 1000) / 1000 / 60;
 
           if (minutesSinceLastFetch < MINUTES_BETWEEN_UPDATES) {
-            // If the data is not old, update the state with the data.
             dispatch(fetchDataFromFirebaseSuccess(currencyData));
           } else {
-            // If the data is old (more than one hour?) fetch new data from fixer.io.
             dispatch(tryFetchDataFromFixer());
           }
         } else {
-          // This will only if the Firebase database is empty or returns something else
-          // than an object.
           dispatch(tryFetchDataFromFixer());
         }
       })

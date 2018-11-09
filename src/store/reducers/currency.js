@@ -11,6 +11,7 @@ const initialState = {
 const reducer = (state = initialState, action) => {
   switch (action.type) {
     case actionTypes.FETCH_DATA_FROM_FIREBASE_START:
+    case actionTypes.FETCH_DATA_FROM_FIXER_START:
       return {
         ...state,
         loading: true
@@ -21,6 +22,7 @@ const reducer = (state = initialState, action) => {
         ...state,
         currenciesData: action.currencyData,
         convertedValues: action.currencyData.rates,
+        error: false,
         loading: false
       };
     case actionTypes.FETCH_DATA_FROM_FIREBASE_FAIL:
@@ -31,10 +33,10 @@ const reducer = (state = initialState, action) => {
         errorMessage: action.errorMessage,
         loading: false
       };
-    case actionTypes.FETCH_DATA_FROM_FIXER_START:
+    case actionTypes.UPDATE_CURRENCY_DISPLAY:
       return {
         ...state,
-        loading: true
+        convertedValues: action.newValues
       };
     default:
       return state;
