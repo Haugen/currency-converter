@@ -2,6 +2,7 @@ import React, { Component } from 'react';
 import './App.css';
 import axios from 'axios';
 import Currency from './components/Currency/Currency';
+import './utility/date-format';
 
 class App extends Component {
   state = {
@@ -67,20 +68,16 @@ class App extends Component {
     // Update all currencies based on the target one.
     for (let [currency] of Object.entries(exchangesValues)) {
       if (currency !== targetCurrency) {
-        exchangesValues[currency] =
-          (rates[currency] / rates[targetCurrency]) * targetValue;
+        exchangesValues[currency] = (
+          (rates[currency] / rates[targetCurrency]) *
+          targetValue
+        ).toFixed(2);
       }
     }
 
     this.setState({
       convertedValues: exchangesValues
     });
-
-    console.log('rates:', rates);
-    console.log('exchanges values:', exchangesValues);
-    console.log('currency:', targetCurrency);
-    console.log('value:', targetValue);
-    console.log(this.state);
   };
 
   render() {
@@ -109,7 +106,12 @@ class App extends Component {
 
     return (
       <div className="App">
-        <h1>currenciesData</h1>
+        <h1>Currencies</h1>
+        {this.state.currenciesData
+          ? new Date(this.state.currenciesData.timestamp * 1000).format(
+              'F j, Y G:i:s'
+            )
+          : null}
         {render}
       </div>
     );
