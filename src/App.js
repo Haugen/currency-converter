@@ -53,7 +53,7 @@ class App extends Component {
           <h1 className="is-size-1">Currency Converter</h1>
           {lastUpdated ? 'Exchange rates last updated ' + lastUpdated : null}
         </div>
-        <div className="section">{render}</div>
+        <div className="App section">{render}</div>
       </>
     );
   }
