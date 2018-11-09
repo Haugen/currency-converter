@@ -4,6 +4,13 @@ import axios from 'axios';
 import Currency from './components/Currency/Currency';
 import './utility/date-format';
 
+const BASE_URL = 'http://data.fixer.io/api/';
+const API_KEY = '2448320e1602d59da4e8a5d506254879';
+const BASE_CURRENCY = 'USD'; // Can't change base currency with my current plan.
+const CURRENCIES = ['USD', 'SEK', 'ARS', 'COP'];
+
+const FIREBASE_BASE_URL = 'https://currency-converter-70cf6.firebaseio.com';
+
 class App extends Component {
   // state = {
   //   currenciesData: null,
@@ -41,21 +48,39 @@ class App extends Component {
    */
   componentDidMount() {
     // Using dummy data idential to the API response to not waste API calls.
-    // axios
-    //   .get('/currency')
-    //   .then(response => {
-    //     this.setState({
-    //       currenciesData: response.data,
-    //       convertedValues: response.data.rates
-    //     });
-    //   })
-    //   .catch(error => {
-    //     this.setState({
-    //       error: true,
-    //       errorMEssage: error.message
-    //     });
-    //   });
+    axios
+      .get(
+        `${BASE_URL}latest?access_key=${API_KEY}&symbols=${CURRENCIES.join(
+          ','
+        )}`
+      )
+      .then(response => {
+        console.log('API response:', response.data);
+        this.saveData(response.data);
+        this.setState({
+          currenciesData: response.data,
+          convertedValues: response.data.rates
+        });
+      })
+      .catch(error => {
+        this.setState({
+          error: true,
+          errorMEssage: error.message
+        });
+      });
   }
+
+  saveData = data => {
+    console.log('data:' + data);
+    axios
+      .post(FIREBASE_BASE_URL + '/currency-data.json', data)
+      .then(response => {
+        console.log('response:' + response.data);
+      })
+      .catch(error => {
+        console.log('error:' + error);
+      });
+  };
 
   /**
    * Each time an input field is changed, update the state values and then pass them
