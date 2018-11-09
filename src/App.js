@@ -6,48 +6,60 @@ import './utility/date-format';
 
 const BASE_URL = 'http://data.fixer.io/api/';
 const API_KEY = '2448320e1602d59da4e8a5d506254879';
-const BASE_CURRENCY = 'USD'; // Can't change base currency with my current plan.
+// const BASE_CURRENCY = 'USD'; // Can't change base currency with my current plan.
 const CURRENCIES = ['USD', 'SEK', 'ARS', 'COP'];
+
+const MINUTES_BETWEEN_UPDATES = 10;
 
 const FIREBASE_BASE_URL = 'https://currency-converter-70cf6.firebaseio.com';
 
 class App extends Component {
-  // state = {
-  //   currenciesData: null,
-  //   convertedValues: null,
-  //   error: false,
-  //   errorMEssage: ''
-  // };
-
-  // Dummy state to not waste API calls while developing.
   state = {
-    currenciesData: {
-      base: 'EUR',
-      date: '2018-11-09',
-      rates: {
-        USD: 1.136557,
-        SEK: 10.251864,
-        ARS: 40.313287,
-        COP: 3581.859595
-      },
-      success: true,
-      timestamp: 1541723646
-    },
-    convertedValues: {
-      USD: 1.136557,
-      SEK: 10.251864,
-      ARS: 40.313287,
-      COP: 3581.859595
-    },
+    currenciesData: null,
+    convertedValues: null,
     error: false,
     errorMEssage: ''
   };
+
+  // Dummy state to not waste API calls while developing.
+  // state = {
+  //   currenciesData: {
+  //     base: 'EUR',
+  //     date: '2018-11-09',
+  //     rates: {
+  //       USD: 1.136557,
+  //       SEK: 10.251864,
+  //       ARS: 40.313287,
+  //       COP: 3581.859595
+  //     },
+  //     success: true,
+  //     timestamp: 1541723646
+  //   },
+  //   convertedValues: {
+  //     USD: 1.136557,
+  //     SEK: 10.251864,
+  //     ARS: 40.313287,
+  //     COP: 3581.859595
+  //   },
+  //   error: false,
+  //   errorMEssage: ''
+  // };
 
   /**
    * On mount, fetch the currency data from the backend and store it in the state.
    */
   componentDidMount() {
     // Using dummy data idential to the API response to not waste API calls.
+
+    // Fetch data from Firebase.
+    this.fetchDataFromFirebase();
+
+    // // // Update the state with the data from fixer.io
+
+    // // // Replace the data on Firebase with new data from fixer.io
+  }
+
+  fetchNewDataFromFixer = () => {
     axios
       .get(
         `${BASE_URL}latest?access_key=${API_KEY}&symbols=${CURRENCIES.join(
@@ -55,8 +67,7 @@ class App extends Component {
         )}`
       )
       .then(response => {
-        console.log('API response:', response.data);
-        this.saveData(response.data);
+        this.saveDataToFirebase(response.data);
         this.setState({
           currenciesData: response.data,
           convertedValues: response.data.rates
@@ -68,14 +79,49 @@ class App extends Component {
           errorMEssage: error.message
         });
       });
-  }
+  };
 
-  saveData = data => {
-    console.log('data:' + data);
+  fetchDataFromFirebase = () => {
     axios
-      .post(FIREBASE_BASE_URL + '/currency-data.json', data)
+      .get(FIREBASE_BASE_URL + '/currency-data.json')
       .then(response => {
-        console.log('response:' + response.data);
+        const currencyData = response.data
+          ? Object.values(response.data)[0]
+          : null;
+
+        if (currencyData) {
+          const minutesSinceLastFetch =
+            (Date.now() - currencyData.timestamp * 1000) / 1000 / 60;
+
+          if (minutesSinceLastFetch < MINUTES_BETWEEN_UPDATES) {
+            // If the data is not old, update the state with the data.
+            this.setState({
+              currenciesData: currencyData,
+              convertedValues: currencyData.rates
+            });
+          } else {
+            // If the data is old (more than one hour?) fetch new data from fixer.io.
+            this.fetchNewDataFromFixer();
+          }
+        } else {
+          // This will only if the Firebase database is empty or returns something else
+          // than an object.
+          this.fetchNewDataFromFixer();
+        }
+      })
+      .catch(error => {
+        this.setState({
+          error: true,
+          errorMEssage: error.message
+        });
+      });
+  };
+
+  saveDataToFirebase = data => {
+    axios
+      .put(FIREBASE_BASE_URL + '/currency-data.json', data)
+      .then(response => {
+        console.log('response:' + response);
       })
       .catch(error => {
         console.log('error:' + error);
