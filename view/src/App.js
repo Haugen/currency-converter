@@ -18,19 +18,19 @@ class App extends Component {
       base: 'EUR',
       date: '2018-11-09',
       rates: {
-        ARS: 40.313287,
-        COP: 3581.859595,
+        USD: 1.136557,
         SEK: 10.251864,
-        USD: 1.136557
+        ARS: 40.313287,
+        COP: 3581.859595
       },
       success: true,
       timestamp: 1541723646
     },
     convertedValues: {
-      ARS: 40.313287,
-      COP: 3581.859595,
+      USD: 1.136557,
       SEK: 10.251864,
-      USD: 1.136557
+      ARS: 40.313287,
+      COP: 3581.859595
     },
     error: false,
     errorMEssage: ''
@@ -68,17 +68,19 @@ class App extends Component {
     const targetCurrency = event.target.id;
     const targetvalue = event.target.value;
 
-    this.setState(
-      oldState => {
-        return {
-          convertedValues: {
-            ...oldState.convertedValues,
-            [targetCurrency]: Number(targetvalue)
-          }
-        };
-      },
-      () => this.handleConversion(targetCurrency, targetvalue)
-    );
+    if (!isNaN(Number(targetvalue))) {
+      this.setState(
+        oldState => {
+          return {
+            convertedValues: {
+              ...oldState.convertedValues,
+              [targetCurrency]: Number(targetvalue)
+            }
+          };
+        },
+        () => this.handleConversion(targetCurrency, targetvalue)
+      );
+    }
   };
 
   /**
