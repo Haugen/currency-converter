@@ -9,7 +9,7 @@ const API_KEY = '2448320e1602d59da4e8a5d506254879';
 // const BASE_CURRENCY = 'USD'; // Can't change base currency with my current plan.
 const CURRENCIES = ['USD', 'SEK', 'ARS', 'COP'];
 
-const MINUTES_BETWEEN_UPDATES = 10;
+const MINUTES_BETWEEN_UPDATES = 120;
 
 const FIREBASE_BASE_URL = 'https://currency-converter-70cf6.firebaseio.com';
 
@@ -21,42 +21,20 @@ class App extends Component {
     errorMEssage: ''
   };
 
-  // Dummy state to not waste API calls while developing.
-  // state = {
-  //   currenciesData: {
-  //     base: 'EUR',
-  //     date: '2018-11-09',
-  //     rates: {
-  //       USD: 1.136557,
-  //       SEK: 10.251864,
-  //       ARS: 40.313287,
-  //       COP: 3581.859595
-  //     },
-  //     success: true,
-  //     timestamp: 1541723646
-  //   },
-  //   convertedValues: {
-  //     USD: 1.136557,
-  //     SEK: 10.251864,
-  //     ARS: 40.313287,
-  //     COP: 3581.859595
-  //   },
-  //   error: false,
-  //   errorMEssage: ''
-  // };
-
   /**
    * On mount, fetch the currency data from the backend and store it in the state.
    */
   componentDidMount() {
     // Using dummy data idential to the API response to not waste API calls.
 
+    // Reset potential errors.
+    this.setState({
+      error: false,
+      errorMEssage: ''
+    });
+
     // Fetch data from Firebase.
     this.fetchDataFromFirebase();
-
-    // // // Update the state with the data from fixer.io
-
-    // // // Replace the data on Firebase with new data from fixer.io
   }
 
   fetchNewDataFromFixer = () => {
@@ -85,9 +63,7 @@ class App extends Component {
     axios
       .get(FIREBASE_BASE_URL + '/currency-data.json')
       .then(response => {
-        const currencyData = response.data
-          ? Object.values(response.data)[0]
-          : null;
+        const currencyData = response.data ? response.data : null;
 
         if (currencyData) {
           const minutesSinceLastFetch =
@@ -121,10 +97,13 @@ class App extends Component {
     axios
       .put(FIREBASE_BASE_URL + '/currency-data.json', data)
       .then(response => {
-        console.log('response:' + response);
+        console.log('Fetched new data!');
       })
       .catch(error => {
-        console.log('error:' + error);
+        this.setState({
+          error: true,
+          errorMEssage: error.message
+        });
       });
   };
 
@@ -205,6 +184,7 @@ class App extends Component {
     return (
       <div className="App">
         <h1>Currencies</h1>
+        Last updated:{' '}
         {this.state.currenciesData
           ? new Date(this.state.currenciesData.timestamp * 1000).format(
               'F j, Y G:i:s'
