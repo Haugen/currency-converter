@@ -5,9 +5,33 @@ import Currency from './components/Currency/Currency';
 import './utility/date-format';
 
 class App extends Component {
+  // state = {
+  //   currenciesData: null,
+  //   convertedValues: null,
+  //   error: false,
+  //   errorMEssage: ''
+  // };
+
+  // Dummy state to not waste API calls while developing.
   state = {
-    currenciesData: null,
-    convertedValues: null,
+    currenciesData: {
+      base: 'EUR',
+      date: '2018-11-09',
+      rates: {
+        ARS: 40.313287,
+        COP: 3581.859595,
+        SEK: 10.251864,
+        USD: 1.136557
+      },
+      success: true,
+      timestamp: 1541723646
+    },
+    convertedValues: {
+      ARS: 40.313287,
+      COP: 3581.859595,
+      SEK: 10.251864,
+      USD: 1.136557
+    },
     error: false,
     errorMEssage: ''
   };
@@ -16,20 +40,21 @@ class App extends Component {
    * On mount, fetch the currency data from the backend and store it in the state.
    */
   componentDidMount() {
-    axios
-      .get('/currency')
-      .then(response => {
-        this.setState({
-          currenciesData: response.data,
-          convertedValues: response.data.rates
-        });
-      })
-      .catch(error => {
-        this.setState({
-          error: true,
-          errorMEssage: error.message
-        });
-      });
+    // Using dummy data idential to the API response to not waste API calls.
+    // axios
+    //   .get('/currency')
+    //   .then(response => {
+    //     this.setState({
+    //       currenciesData: response.data,
+    //       convertedValues: response.data.rates
+    //     });
+    //   })
+    //   .catch(error => {
+    //     this.setState({
+    //       error: true,
+    //       errorMEssage: error.message
+    //     });
+    //   });
   }
 
   /**
