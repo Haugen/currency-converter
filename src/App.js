@@ -1,111 +1,21 @@
 import React, { Component } from 'react';
 import './App.css';
-import axios from 'axios';
+import { connect } from 'react-redux';
+
 import Currency from './components/Currency/Currency';
 import './utility/date-format';
-
-const BASE_URL = 'http://data.fixer.io/api/';
-const API_KEY = process.env.REACT_APP_FIXER_API_KEY;
-// const BASE_CURRENCY = 'USD'; // Can't change base currency with my current plan.
-const CURRENCIES = ['USD', 'SEK', 'ARS', 'COP'];
-
-const MINUTES_BETWEEN_UPDATES = 120;
-
-const FIREBASE_BASE_URL = 'https://currency-converter-70cf6.firebaseio.com';
+import * as firebaseActions from './store/actions/firebase';
 
 class App extends Component {
-  state = {
-    currenciesData: null,
-    convertedValues: null,
-    error: false,
-    errorMEssage: ''
-  };
-
-  /**
-   * On mount, fetch the currency data from the backend and store it in the state.
-   */
   componentDidMount() {
-    // Using dummy data idential to the API response to not waste API calls.
-
-    // Reset potential errors.
-    this.setState({
-      error: false,
-      errorMEssage: ''
-    });
-
-    // Fetch data from Firebase.
-    this.fetchDataFromFirebase();
+    /**
+     * Trying to fetch data from Firebase.
+     * If there is none, fetch from Fixer, save in Firebase and update state.
+     * If it's old, fetch from Fixer, save in Firebase and update state.
+     * If it's recent, fetch from Firebase and update state.
+     */
+    this.props.tryFetchDataFromFirebase();
   }
-
-  fetchNewDataFromFixer = () => {
-    axios
-      .get(
-        `${BASE_URL}latest?access_key=${API_KEY}&symbols=${CURRENCIES.join(
-          ','
-        )}`
-      )
-      .then(response => {
-        this.saveDataToFirebase(response.data);
-        this.setState({
-          currenciesData: response.data,
-          convertedValues: response.data.rates
-        });
-      })
-      .catch(error => {
-        this.setState({
-          error: true,
-          errorMEssage: error.message
-        });
-      });
-  };
-
-  fetchDataFromFirebase = () => {
-    axios
-      .get(FIREBASE_BASE_URL + '/currency-data.json')
-      .then(response => {
-        const currencyData = response.data ? response.data : null;
-
-        if (currencyData) {
-          const minutesSinceLastFetch =
-            (Date.now() - currencyData.timestamp * 1000) / 1000 / 60;
-
-          if (minutesSinceLastFetch < MINUTES_BETWEEN_UPDATES) {
-            // If the data is not old, update the state with the data.
-            this.setState({
-              currenciesData: currencyData,
-              convertedValues: currencyData.rates
-            });
-          } else {
-            // If the data is old (more than one hour?) fetch new data from fixer.io.
-            this.fetchNewDataFromFixer();
-          }
-        } else {
-          // This will only if the Firebase database is empty or returns something else
-          // than an object.
-          this.fetchNewDataFromFixer();
-        }
-      })
-      .catch(error => {
-        this.setState({
-          error: true,
-          errorMEssage: error.message
-        });
-      });
-  };
-
-  saveDataToFirebase = data => {
-    axios
-      .put(FIREBASE_BASE_URL + '/currency-data.json', data)
-      .then(response => {
-        console.log('Fetched new data!');
-      })
-      .catch(error => {
-        this.setState({
-          error: true,
-          errorMEssage: error.message
-        });
-      });
-  };
 
   /**
    * Each time an input field is changed, update the state values and then pass them
@@ -158,18 +68,18 @@ class App extends Component {
   };
 
   render() {
-    // Start with loading while waiting for the API call.
+    // Start with loading while waiting for the API calls.
     let render = 'Loading...';
 
     // If there is an error, display the error message.
-    if (this.state.error) {
-      render = this.state.errorMEssage;
+    if (this.props.error) {
+      render = this.props.errorMessage;
     }
 
     // If the state has been updated with currency values, prepare them for display.
-    if (this.state.convertedValues) {
+    if (this.props.convertedValues) {
       render = [];
-      for (let [currency, rate] of Object.entries(this.state.convertedValues)) {
+      for (let [currency, rate] of Object.entries(this.props.convertedValues)) {
         render.push(
           <Currency
             key={currency}
@@ -185,8 +95,8 @@ class App extends Component {
       <div className="App">
         <h1>Currencies</h1>
         Last updated:{' '}
-        {this.state.currenciesData
-          ? new Date(this.state.currenciesData.timestamp * 1000).format(
+        {this.props.currenciesData
+          ? new Date(this.props.currenciesData.timestamp * 1000).format(
               'F j, Y G:i:s'
             )
           : null}
@@ -196,4 +106,24 @@ class App extends Component {
   }
 }
 
-export default App;
+const mapStateToProps = state => {
+  return {
+    currenciesData: state.currenciesData,
+    convertedValues: state.convertedValues,
+    error: state.error,
+    errorMessage: state.errorMessage,
+    loading: state.loading
+  };
+};
+
+const mapDispatchToProps = dispatch => {
+  return {
+    tryFetchDataFromFirebase: () =>
+      dispatch(firebaseActions.tryFetchDataFromFirebase())
+  };
+};
+
+export default connect(
+  mapStateToProps,
+  mapDispatchToProps
+)(App);
