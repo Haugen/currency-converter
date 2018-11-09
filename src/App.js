@@ -5,7 +5,7 @@ import Currency from './components/Currency/Currency';
 import './utility/date-format';
 
 const BASE_URL = 'http://data.fixer.io/api/';
-const API_KEY = '2448320e1602d59da4e8a5d506254879';
+const API_KEY = process.env.REACT_APP_FIXER_API_KEY;
 // const BASE_CURRENCY = 'USD'; // Can't change base currency with my current plan.
 const CURRENCIES = ['USD', 'SEK', 'ARS', 'COP'];
 
