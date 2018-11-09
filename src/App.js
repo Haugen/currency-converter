@@ -46,8 +46,8 @@ class App extends Component {
     }
 
     return (
-      <div className="App">
-        <h1>Currencies</h1>
+      <div className="App section">
+        <h1 className="is-size-1">Currencies</h1>
         Last updated:{' '}
         {this.props.currenciesData
           ? new Date(this.props.currenciesData.timestamp * 1000).format(

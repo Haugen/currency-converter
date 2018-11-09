@@ -3,9 +3,12 @@ import React from 'react';
 const Currency = props => {
   return (
     <>
-      <div className="currency">
-        <h5>{props.name}</h5>
+      <div className="field">
+        <h5 className="is-size-5">
+          <strong>{props.name}</strong>
+        </h5>
         <input
+          className="input is-primary is-size-4"
           onChange={props.handleChange}
           id={props.name}
           type="text"
