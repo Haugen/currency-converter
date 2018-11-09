@@ -3,17 +3,23 @@ import React from 'react';
 const Currency = props => {
   return (
     <>
-      <div className="field">
-        <h5 className="is-size-5">
-          <strong>{props.name}</strong>
-        </h5>
-        <input
-          className="input is-primary is-size-4"
-          onChange={props.handleChange}
-          id={props.name}
-          type="text"
-          value={props.rate}
-        />
+      <div className="field is-horizontal">
+        <div className="field-label is-normal">
+          <label className="label">{props.name}</label>
+        </div>
+        <div className="field-body">
+          <div className="field">
+            <p className="control">
+              <input
+                className="input is-primary is-medium"
+                onChange={props.handleChange}
+                id={props.name}
+                type="text"
+                value={props.rate}
+              />
+            </p>
+          </div>
+        </div>
       </div>
     </>
   );

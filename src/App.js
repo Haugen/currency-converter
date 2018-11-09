@@ -20,8 +20,9 @@ class App extends Component {
   render() {
     let convertedValues = this.props.convertedValues || null;
     let currenciesData = this.props.currenciesData || null;
+    let lastUpdated = null;
     // Start with loading while waiting for the API calls.
-    let render = 'Loading...';
+    let render = <div style={{ textAlign: 'center' }}>Loading...</div>;
 
     // If there is an error, display the error message.
     if (this.props.error) {
@@ -29,7 +30,8 @@ class App extends Component {
     }
 
     // If the state has been updated with currency values, prepare them for display.
-    if (convertedValues) {
+    if (convertedValues && !this.props.error) {
+      lastUpdated = new Date(currenciesData.timestamp * 1000).format('G:i');
       render = [];
       for (let [currency, rate] of Object.entries(convertedValues)) {
         render.push(
@@ -46,16 +48,13 @@ class App extends Component {
     }
 
     return (
-      <div className="App section">
-        <h1 className="is-size-1">Currencies</h1>
-        Last updated:{' '}
-        {this.props.currenciesData
-          ? new Date(this.props.currenciesData.timestamp * 1000).format(
-              'F j, Y G:i:s'
-            )
-          : null}
-        {render}
-      </div>
+      <>
+        <div className="App section">
+          <h1 className="is-size-1">Currency Converter</h1>
+          {lastUpdated ? 'Exchange rates last updated ' + lastUpdated : null}
+        </div>
+        <div className="section">{render}</div>
+      </>
     );
   }
 }
