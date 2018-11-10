@@ -16,7 +16,7 @@ const Currency = props => {
                 onChange={props.handleChange}
                 id={props.name}
                 type="text"
-                value={props.rate}
+                value={props.value}
               />
             </p>
           </div>
@@ -29,7 +29,7 @@ const Currency = props => {
 Currency.propTypes = {
   name: PropTypes.string.isRequired,
   handleChange: PropTypes.func.isRequired,
-  rate: PropTypes.number.isRequired
+  value: PropTypes.number.isRequired
 };
 
 export default Currency;
