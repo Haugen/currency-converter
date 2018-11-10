@@ -14,7 +14,7 @@ class AddCurrency extends React.Component {
 
     // Just return if the target is not a valid currency or already active.
     if (
-      target === '----' ||
+      target === 'Select currency' ||
       target === null ||
       (this.props.activeCurrencies && target in this.props.activeCurrencies)
     ) {
@@ -31,7 +31,7 @@ class AddCurrency extends React.Component {
   render() {
     let currencies = [
       <option key="empty" id="empty">
-        ----
+        Select currency
       </option>
     ];
     if (this.props.currencies) {
@@ -45,11 +45,21 @@ class AddCurrency extends React.Component {
     }
 
     return (
-      <>
+      <div className="add-currencies">
         <div>Add currencies to start comparing.</div>
-        <select onChange={this.handleSelectChange}>{currencies}</select>
-        <button onClick={this.addCurrency}>Add</button>
-      </>
+        <select
+          className="select is-primary is-medium"
+          onChange={this.handleSelectChange}
+        >
+          {currencies}
+        </select>
+        <button
+          className="button is-primary is-medium"
+          onClick={this.addCurrency}
+        >
+          Add currency
+        </button>
+      </div>
     );
   }
 }

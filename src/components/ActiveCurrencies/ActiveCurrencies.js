@@ -28,12 +28,7 @@ class ActiveCurrencies extends React.Component {
       }
     }
 
-    return (
-      <>
-        <p>Active currencies:</p>
-        {activeCurrencies}
-      </>
-    );
+    return <>{activeCurrencies}</>;
   }
 }
 

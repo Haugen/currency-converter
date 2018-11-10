@@ -20,12 +20,12 @@ class App extends Component {
 
     return (
       <>
-        <div className="App section">
+        <div className="section">
           <h1 className="is-size-1">Currency Converter</h1>
           <LastUpdated />
           <AddCurrency currencies={rates} />
         </div>
-        <div className="App section">
+        <div className="section">
           <ActiveCurrencies />
         </div>
       </>
