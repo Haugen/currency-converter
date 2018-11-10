@@ -12,7 +12,14 @@ class AddCurrency extends React.Component {
     let target = this.state.currentTargetCurrency;
     let targetRate = this.props.allCurrencies.rates[target];
 
-    if (target === '----' || target === null) return;
+    // Just return if the target is not a valid currency or already active.
+    if (
+      target === '----' ||
+      target === null ||
+      (this.props.activeCurrencies && target in this.props.activeCurrencies)
+    ) {
+      return;
+    }
 
     this.props.addCurrency({ currency: target, rate: targetRate });
   };
@@ -39,7 +46,7 @@ class AddCurrency extends React.Component {
 
     return (
       <>
-        <div>Add currencies goes here.</div>
+        <div>Add currencies to start comparing.</div>
         <select onChange={this.handleSelectChange}>{currencies}</select>
         <button onClick={this.addCurrency}>Add</button>
       </>
@@ -49,7 +56,8 @@ class AddCurrency extends React.Component {
 
 const mapStateToProps = state => {
   return {
-    allCurrencies: state.currenciesData
+    allCurrencies: state.currenciesData,
+    activeCurrencies: state.activeCurrencies
   };
 };
 

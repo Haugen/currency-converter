@@ -35,11 +35,7 @@ class App extends Component {
 
 const mapStateToProps = state => {
   return {
-    currenciesData: state.currenciesData,
-    activeCurrencies: state.activeCurrencies,
-    error: state.error,
-    errorMessage: state.errorMessage,
-    loading: state.loading
+    currenciesData: state.currenciesData
   };
 };
 
