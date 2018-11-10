@@ -16,7 +16,13 @@ class ActiveCurrencies extends React.Component {
             key={currency.currency}
             name={currency.currency}
             value={currency.value}
-            handleChange={this.props.onInputChange}
+            handleChange={event =>
+              this.props.onInputChange(
+                event,
+                this.props.currenciesData,
+                this.props.activeCurrencies
+              )
+            }
           />
         );
       }
@@ -33,6 +39,7 @@ class ActiveCurrencies extends React.Component {
 
 const mapStateToProps = state => {
   return {
+    currenciesData: state.currenciesData,
     activeCurrencies: state.activeCurrencies
   };
 };

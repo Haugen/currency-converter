@@ -25,16 +25,27 @@ const handleConversion = (
   activeCurrencies
 ) => {
   const rates = { ...currenciesData.rates };
-  const exchangesValues = { ...activeCurrencies };
+  let exchangesValues = {};
 
   // Update all currencies based on the target one.
-  for (let [currency] of Object.entries(exchangesValues)) {
-    if (currency !== targetCurrency) {
-      exchangesValues[currency] = Number(
-        ((rates[currency] / rates[targetCurrency]) * targetValue).toFixed(2)
-      );
+  for (let currency of Object.values(activeCurrencies)) {
+    if (currency.currency !== targetCurrency) {
+      exchangesValues[currency.currency] = {
+        currency: currency.currency,
+        rate: rates[currency.currency],
+        value: Number(
+          (
+            (rates[currency.currency] / rates[targetCurrency]) *
+            targetValue
+          ).toFixed(2)
+        )
+      };
     } else {
-      Number((exchangesValues[currency] = targetValue));
+      exchangesValues[currency.currency] = {
+        currency: targetCurrency,
+        rate: rates[targetCurrency],
+        value: Number(targetValue)
+      };
     }
   }
 
