@@ -21,7 +21,6 @@ const reducer = (state = initialState, action) => {
       return {
         ...state,
         currenciesData: action.currencyData,
-        activeCurrencies: action.currencyData.rates,
         error: false,
         loading: false
       };
