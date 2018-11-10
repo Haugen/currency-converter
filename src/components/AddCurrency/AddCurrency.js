@@ -46,7 +46,6 @@ class AddCurrency extends React.Component {
 
     return (
       <div className="add-currencies">
-        <div>Add currencies to start comparing.</div>
         <select
           className="select is-primary is-medium"
           onChange={this.handleSelectChange}

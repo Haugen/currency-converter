@@ -27,7 +27,6 @@ const handleConversion = (
   const rates = { ...currenciesData.rates };
   let exchangesValues = {};
 
-  // Update all currencies based on the target one.
   for (let currency of Object.values(activeCurrencies)) {
     if (currency.currency !== targetCurrency) {
       exchangesValues[currency.currency] = {
@@ -58,7 +57,7 @@ const handleConversion = (
 export const addActiveCurrency = currency => {
   let newCurrency = {
     ...currency,
-    value: currency.rate
+    value: Number(currency.rate.toFixed(2))
   };
 
   return {

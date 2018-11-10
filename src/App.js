@@ -4,7 +4,6 @@ import { connect } from 'react-redux';
 
 import AddCurrency from './components/AddCurrency/AddCurrency';
 import LastUpdated from './components/LastUpdated/LastUpdated';
-import './utility/date-format';
 import * as actionCreators from './store/actions/index';
 import ActiveCurrencies from './components/ActiveCurrencies/ActiveCurrencies';
 
@@ -14,20 +13,29 @@ class App extends Component {
   }
 
   render() {
-    const rates = this.props.currenciesData
-      ? this.props.currenciesData.rates
-      : null;
+    let rates, timestamp;
+
+    if (this.props.currenciesData) {
+      rates = this.props.currenciesData.rates;
+      timestamp = this.props.currenciesData.timestamp;
+    }
+
+    console.log(this.props.loading);
 
     return (
       <>
-        <div className="section">
-          <h1 className="is-size-1">Currency Converter</h1>
-          <LastUpdated />
-          <AddCurrency currencies={rates} />
-        </div>
-        <div className="section">
-          <ActiveCurrencies />
-        </div>
+        {this.props.loading ? null : (
+          <>
+            <div className="section">
+              <h1 className="is-size-2">Currency Converter</h1>
+              <LastUpdated timestamp={timestamp} />
+              <AddCurrency currencies={rates} />
+            </div>
+            <div className="section">
+              <ActiveCurrencies />
+            </div>
+          </>
+        )}
       </>
     );
   }
@@ -35,7 +43,8 @@ class App extends Component {
 
 const mapStateToProps = state => {
   return {
-    currenciesData: state.currenciesData
+    currenciesData: state.currenciesData,
+    loading: state.loading
   };
 };
 

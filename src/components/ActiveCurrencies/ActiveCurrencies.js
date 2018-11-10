@@ -6,7 +6,7 @@ import Currency from '../Currency/Currency';
 
 class ActiveCurrencies extends React.Component {
   render() {
-    let activeCurrencies = null;
+    let activeCurrencies = 'Add currencies above to get started.';
 
     if (this.props.activeCurrencies) {
       activeCurrencies = [];
