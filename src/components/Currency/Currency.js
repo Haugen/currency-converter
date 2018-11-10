@@ -4,9 +4,13 @@ import PropTypes from 'prop-types';
 const Currency = props => {
   return (
     <>
-      <div className="field is-horizontal">
+      <div className="currency field is-horizontal">
         <div className="field-label is-normal">
-          <label className="label">{props.name}</label>
+          <i
+            onClick={props.removeCurrency}
+            className="delete-icon fas fa-times button is-danger is-rounded is-outlined"
+          />
+          <span className="label">{props.name}</span>
         </div>
         <div className="field-body">
           <div className="field">
@@ -29,6 +33,7 @@ const Currency = props => {
 Currency.propTypes = {
   name: PropTypes.string.isRequired,
   handleChange: PropTypes.func.isRequired,
+  removeCurrency: PropTypes.func.isRequired,
   value: PropTypes.number.isRequired
 };
 

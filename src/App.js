@@ -20,8 +20,6 @@ class App extends Component {
       timestamp = this.props.currenciesData.timestamp;
     }
 
-    console.log(this.props.loading);
-
     return (
       <>
         {this.props.loading ? null : (

@@ -16,6 +16,12 @@ class ActiveCurrencies extends React.Component {
             key={currency.currency}
             name={currency.currency}
             value={currency.value}
+            removeCurrency={() =>
+              this.props.removeActiveCurrency(
+                currency.currency,
+                this.props.activeCurrencies
+              )
+            }
             handleChange={event =>
               this.props.onInputChange(
                 event,
@@ -48,7 +54,9 @@ const mapDispatchToProps = dispatch => {
           currenciesData,
           activeCurrencies
         )
-      )
+      ),
+    removeActiveCurrency: (currency, activeCurrencies) =>
+      dispatch(actionCreators.removeActiveCurrency(currency, activeCurrencies))
   };
 };
 

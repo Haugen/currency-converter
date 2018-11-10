@@ -66,4 +66,12 @@ export const addActiveCurrency = currency => {
   };
 };
 
-export const removeActiveCurrency = currency => {};
+export const removeActiveCurrency = (currency, activeCurrencies) => {
+  let newCurrencies = { ...activeCurrencies };
+  delete newCurrencies[currency];
+
+  return {
+    type: actionTypes.REMOVE_ACTIVE_CURRENCY,
+    newCurrencies
+  };
+};

@@ -46,7 +46,10 @@ const reducer = (state = initialState, action) => {
         }
       };
     case actionTypes.REMOVE_ACTIVE_CURRENCY:
-      return state;
+      return {
+        ...state,
+        activeCurrencies: action.newCurrencies
+      };
     default:
       return state;
   }
