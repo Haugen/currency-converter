@@ -3,6 +3,7 @@ import './App.scss';
 import { connect } from 'react-redux';
 
 import Currency from './components/Currency/Currency';
+import AddCurrency from './components/AddCurrency/AddCurrency';
 import './utility/date-format';
 import * as actionCreators from './store/actions/index';
 
@@ -18,9 +19,10 @@ class App extends Component {
   }
 
   render() {
-    let convertedValues = this.props.convertedValues || null;
+    let activeCurrencies = this.props.activeCurrencies || null;
     let currenciesData = this.props.currenciesData || null;
     let lastUpdated = null;
+    let addCurrency = null;
     // Start with loading while waiting for the API calls.
     let render = <div style={{ textAlign: 'center' }}>Loading...</div>;
 
@@ -30,17 +32,18 @@ class App extends Component {
     }
 
     // If the state has been updated with currency values, prepare them for display.
-    if (convertedValues && !this.props.error) {
+    if (currenciesData && !this.props.error) {
       lastUpdated = new Date(currenciesData.timestamp * 1000).format('G:i');
+      addCurrency = <AddCurrency />;
       render = [];
-      for (let [currency, rate] of Object.entries(convertedValues)) {
+      for (let [currency, rate] of Object.entries(activeCurrencies)) {
         render.push(
           <Currency
             key={currency}
             name={currency}
             rate={rate}
             handleChange={event =>
-              this.props.onInputChange(event, currenciesData, convertedValues)
+              this.props.onInputChange(event, currenciesData, activeCurrencies)
             }
           />
         );
@@ -52,6 +55,7 @@ class App extends Component {
         <div className="App section">
           <h1 className="is-size-1">Currency Converter</h1>
           {lastUpdated ? 'Exchange rates last updated ' + lastUpdated : null}
+          {addCurrency}
         </div>
         <div className="App section">{render}</div>
       </>
@@ -62,7 +66,7 @@ class App extends Component {
 const mapStateToProps = state => {
   return {
     currenciesData: state.currenciesData,
-    convertedValues: state.convertedValues,
+    activeCurrencies: state.activeCurrencies,
     error: state.error,
     errorMessage: state.errorMessage,
     loading: state.loading
@@ -73,9 +77,13 @@ const mapDispatchToProps = dispatch => {
   return {
     tryFetchDataFromFirebase: () =>
       dispatch(actionCreators.tryFetchDataFromFirebase()),
-    onInputChange: (event, currenciesData, convertedValues) =>
+    onInputChange: (event, currenciesData, activeCurrencies) =>
       dispatch(
-        actionCreators.handleInputChange(event, currenciesData, convertedValues)
+        actionCreators.handleInputChange(
+          event,
+          currenciesData,
+          activeCurrencies
+        )
       )
   };
 };

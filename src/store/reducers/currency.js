@@ -2,7 +2,7 @@ import * as actionTypes from '../actions/actionTypes';
 
 const initialState = {
   currenciesData: null,
-  convertedValues: null,
+  activeCurrencies: null,
   error: false,
   errorMEssage: '',
   loading: false
@@ -21,7 +21,7 @@ const reducer = (state = initialState, action) => {
       return {
         ...state,
         currenciesData: action.currencyData,
-        convertedValues: action.currencyData.rates,
+        activeCurrencies: action.currencyData.rates,
         error: false,
         loading: false
       };
@@ -36,8 +36,12 @@ const reducer = (state = initialState, action) => {
     case actionTypes.UPDATE_CURRENCY_DISPLAY:
       return {
         ...state,
-        convertedValues: action.newValues
+        activeCurrencies: action.newValues
       };
+    case actionTypes.ADD_ACTIVE_CURRENCY:
+      return state;
+    case actionTypes.REMOVE_ACTIVE_CURRENCY:
+      return state;
     default:
       return state;
   }

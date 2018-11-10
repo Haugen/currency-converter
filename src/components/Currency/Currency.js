@@ -1,4 +1,5 @@
 import React from 'react';
+import PropTypes from 'prop-types';
 
 const Currency = props => {
   return (
@@ -23,6 +24,12 @@ const Currency = props => {
       </div>
     </>
   );
+};
+
+Currency.propTypes = {
+  name: PropTypes.string.isRequired,
+  handleChange: PropTypes.func.isRequired,
+  rate: PropTypes.number.isRequired
 };
 
 export default Currency;

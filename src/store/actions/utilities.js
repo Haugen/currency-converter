@@ -1,6 +1,6 @@
 import * as actionTypes from './actionTypes';
 
-export const handleInputChange = (event, currenciesData, convertedValues) => {
+export const handleInputChange = (event, currenciesData, activeCurrencies) => {
   return dispatch => {
     const targetCurrency = event.target.id;
     const targetvalue = event.target.value;
@@ -11,7 +11,7 @@ export const handleInputChange = (event, currenciesData, convertedValues) => {
           targetCurrency,
           Number(targetvalue),
           currenciesData,
-          convertedValues
+          activeCurrencies
         )
       );
     }
@@ -22,10 +22,10 @@ const handleConversion = (
   targetCurrency,
   targetValue,
   currenciesData,
-  convertedValues
+  activeCurrencies
 ) => {
   const rates = { ...currenciesData.rates };
-  const exchangesValues = { ...convertedValues };
+  const exchangesValues = { ...activeCurrencies };
 
   // Update all currencies based on the target one.
   for (let [currency] of Object.entries(exchangesValues)) {
