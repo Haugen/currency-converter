@@ -1,3 +1,7 @@
 export { tryFetchDataFromFirebase } from './firebase';
 export { tryFetchDataFromFixer } from './fixer';
-export { handleInputChange } from './utilities';
+export {
+  handleInputChange,
+  addActiveCurrency,
+  removeActiveCurrency
+} from './utilities';

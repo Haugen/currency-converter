@@ -43,3 +43,17 @@ const handleConversion = (
     newValues: exchangesValues
   };
 };
+
+export const addActiveCurrency = currency => {
+  let newCurrency = {
+    ...currency,
+    value: currency.rate
+  };
+
+  return {
+    type: actionTypes.ADD_ACTIVE_CURRENCY,
+    currency: newCurrency
+  };
+};
+
+export const removeActiveCurrency = currency => {};

@@ -1,4 +1,7 @@
 import React from 'react';
+import { connect } from 'react-redux';
+
+import * as actionCreators from '../../store/actions/index';
 
 class AddCurrency extends React.Component {
   state = {
@@ -7,8 +10,11 @@ class AddCurrency extends React.Component {
 
   addCurrency = event => {
     let target = this.state.currentTargetCurrency;
+    let targetRate = this.props.allCurrencies.rates[target];
 
     if (target === '----' || target === null) return;
+
+    this.props.addCurrency({ currency: target, rate: targetRate });
   };
 
   handleSelectChange = event => {
@@ -41,4 +47,20 @@ class AddCurrency extends React.Component {
   }
 }
 
-export default AddCurrency;
+const mapStateToProps = state => {
+  return {
+    allCurrencies: state.currenciesData
+  };
+};
+
+const mapDispatchToProps = dispatch => {
+  return {
+    addCurrency: currency =>
+      dispatch(actionCreators.addActiveCurrency(currency))
+  };
+};
+
+export default connect(
+  mapStateToProps,
+  mapDispatchToProps
+)(AddCurrency);
