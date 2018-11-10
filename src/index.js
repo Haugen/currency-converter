@@ -9,7 +9,8 @@ import { Provider } from 'react-redux';
 import currencyReducer from './store/reducers/currency';
 
 const composeEnhancers =
-  process.env.NODE_ENV === 'development'
+  process.env.NODE_ENV === 'development' &&
+  window.__REDUX_DEVTOOLS_EXTENSION_COMPOSE__ !== undefined
     ? window.__REDUX_DEVTOOLS_EXTENSION_COMPOSE__
     : null || compose;
 
