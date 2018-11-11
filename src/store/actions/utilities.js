@@ -1,4 +1,5 @@
 import * as actionTypes from './actionTypes';
+import { NR_OF_DECIMALS } from '../../utility/constants';
 
 export const handleInputChange = (event, currenciesData, activeCurrencies) => {
   return dispatch => {
@@ -36,7 +37,7 @@ const handleConversion = (
           (
             (rates[currency.currency] / rates[targetCurrency]) *
             targetValue
-          ).toFixed(2)
+          ).toFixed(NR_OF_DECIMALS)
         )
       };
     } else {
@@ -67,7 +68,7 @@ export const addActiveCurrency = (currency, activeCurrencies) => {
 
   let newCurrency = {
     ...currency,
-    value: Number(newCurrencyValue.toFixed(2))
+    value: Number(newCurrencyValue.toFixed(NR_OF_DECIMALS))
   };
 
   return {

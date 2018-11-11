@@ -2,10 +2,11 @@ import axios from 'axios';
 
 import * as actionTypes from './actionTypes';
 import { saveDataToFirebase } from './firebase';
-
-const BASE_URL = 'http://data.fixer.io/api/';
-const API_KEY = process.env.REACT_APP_FIXER_API_KEY;
-const CURRENCIES = ['USD', 'SEK', 'ARS', 'COP', 'NOK'];
+import {
+  FIXER_API_KEY as API_KEY,
+  FIXER_BASE_URL as BASE_URL,
+  CURRENCIES
+} from '../../utility/constants';
 
 const fetchDataFromFixerStart = () => {
   return {

@@ -2,9 +2,10 @@ import axios from 'axios';
 
 import * as actionTypes from './actionTypes';
 import { tryFetchDataFromFixer } from './fixer';
-
-const MINUTES_BETWEEN_UPDATES = 480;
-const FIREBASE_BASE_URL = 'https://currency-converter-70cf6.firebaseio.com';
+import {
+  MINUTES_BETWEEN_UPDATES,
+  FIREBASE_BASE_URL
+} from '../../utility/constants';
 
 export const saveDataToFirebase = data => {
   return dispatch => {
