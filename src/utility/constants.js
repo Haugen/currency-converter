@@ -4,7 +4,7 @@
 
 export const FIREBASE_BASE_URL =
   'https://currency-converter-70cf6.firebaseio.com';
-export const MINUTES_BETWEEN_UPDATES = 480;
+export const MINUTES_BETWEEN_UPDATES = 1440;
 
 export const FIXER_BASE_URL = 'http://data.fixer.io/api/';
 export const FIXER_API_KEY = process.env.REACT_APP_FIXER_API_KEY;
