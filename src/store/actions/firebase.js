@@ -48,7 +48,13 @@ export const tryFetchDataFromFirebase = () => {
           const minutesSinceLastFetch =
             (Date.now() - currencyData.timestamp * 1000) / 1000 / 60;
 
-          if (minutesSinceLastFetch < MINUTES_BETWEEN_UPDATES) {
+          if (
+            // OBS! Adding this now to alwayas keep fetching the data from Firebase in
+            // production. This is because Firebase doesn't allow me to fetch new data
+            // from Fixer without using https, which is not available in the free plan.
+            process.env.NODE_ENV === 'production' ||
+            minutesSinceLastFetch < MINUTES_BETWEEN_UPDATES
+          ) {
             dispatch(fetchDataFromFirebaseSuccess(currencyData));
           } else {
             dispatch(tryFetchDataFromFixer());
