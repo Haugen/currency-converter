@@ -21,7 +21,10 @@ class AddCurrency extends React.Component {
       return;
     }
 
-    this.props.addCurrency({ currency: target, rate: targetRate });
+    this.props.addCurrency(
+      { currency: target, rate: targetRate },
+      this.props.activeCurrencies
+    );
   };
 
   handleSelectChange = event => {
@@ -72,8 +75,8 @@ const mapStateToProps = state => {
 
 const mapDispatchToProps = dispatch => {
   return {
-    addCurrency: currency =>
-      dispatch(actionCreators.addActiveCurrency(currency))
+    addCurrency: (currency, activeCurrencies) =>
+      dispatch(actionCreators.addActiveCurrency(currency, activeCurrencies))
   };
 };
 

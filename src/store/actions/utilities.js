@@ -54,10 +54,20 @@ const handleConversion = (
   };
 };
 
-export const addActiveCurrency = currency => {
+export const addActiveCurrency = (currency, activeCurrencies) => {
+  let newCurrencyValue;
+
+  if (activeCurrencies && Object.values(activeCurrencies)[0] !== undefined) {
+    let compareCurrency = Object.values(activeCurrencies)[0];
+    newCurrencyValue =
+      (currency.rate / compareCurrency.rate) * compareCurrency.value;
+  } else {
+    newCurrencyValue = currency.rate;
+  }
+
   let newCurrency = {
     ...currency,
-    value: Number(currency.rate.toFixed(2))
+    value: Number(newCurrencyValue.toFixed(2))
   };
 
   return {
