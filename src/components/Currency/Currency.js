@@ -4,7 +4,7 @@ import PropTypes from 'prop-types';
 const Currency = props => {
   return (
     <>
-      <div className="currency field is-horizontal">
+      <div className="field is-horizontal">
         <div className="field-label is-normal">
           {props.name === 'EUR' ? null : (
             <i

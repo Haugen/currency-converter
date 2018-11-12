@@ -9,6 +9,10 @@
   margin: 0 auto;
 }
 
+.section {
+  animation: fadeInSection 0.5s ease-out forwards;
+}
+
 .add-currencies {
   .select,
   .button {
@@ -17,10 +21,37 @@
 }
 
 .currency {
+  margin: 10px 0;
   .delete-icon {
     padding-left: 0.75em;
     padding-right: 0.75em;
     float: left;
     margin-bottom: 2px;
+  }
+
+  &.fade-in {
+    animation: fadeInSection 200ms linear forwards;
+  }
+
+  &.fade-out {
+    animation: fadeOutSection 200ms linear forwards;
+  }
+}
+
+@keyframes fadeInSection {
+  0% {
+    opacity: 0;
+  }
+  100% {
+    opacity: 1;
+  }
+}
+
+@keyframes fadeOutSection {
+  0% {
+    opacity: 1;
+  }
+  100% {
+    opacity: 0;
   }
 }
