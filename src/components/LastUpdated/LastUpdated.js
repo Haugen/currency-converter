@@ -9,12 +9,14 @@ class LastUpdated extends React.Component {
 
     return (
       <>
-        <div>
-          <strong>
-            Exchange rates last fetched from{' '}
-            <a href="http://fixer.io/">fixer.io</a> on {lastUpdatedDate} at{' '}
-            {lastUpdatedTime}.
-          </strong>
+        <div className="message is-info">
+          <p className="message-header">
+            <strong>
+              Exchange rates last fetched from{' '}
+              <a href="http://fixer.io/">fixer.io</a> on {lastUpdatedDate} at{' '}
+              {lastUpdatedTime}.
+            </strong>
+          </p>
         </div>
       </>
     );

@@ -6,25 +6,25 @@ const Currency = props => {
     <>
       <div className="field is-horizontal">
         <div className="field-label is-normal">
-          {props.name === 'EUR' ? null : (
-            <i
-              onClick={props.removeCurrency}
-              className="delete-icon fas fa-times button is-danger is-rounded is-outlined"
-            />
-          )}
           <span className="label">{props.name}</span>
         </div>
         <div className="field-body">
           <div className="field">
-            <p className="control">
+            <div className="control">
+              {props.name === 'EUR' ? null : (
+                <i
+                  onClick={props.removeCurrency}
+                  className="delete-icon fas fa-times button is-info"
+                />
+              )}
               <input
-                className="input is-primary is-medium"
+                className="input is-info is-medium"
                 onChange={props.handleChange}
                 id={props.name}
                 type="text"
                 value={props.value}
               />
-            </p>
+            </div>
           </div>
         </div>
       </div>

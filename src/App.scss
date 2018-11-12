@@ -2,31 +2,51 @@
 @import '~bulma/sass/base/_all.sass';
 @import '~bulma/sass/elements/_all.sass';
 @import '~bulma/sass/layout/section.sass';
+@import '~bulma/sass/components/message.sass';
 
 .App {
-  text-align: center;
-  max-width: 500px;
+  max-width: 600px;
   margin: 0 auto;
-}
-
-.section {
   animation: fadeInSection 0.5s ease-out forwards;
 }
 
+h1 {
+  font-size: 30px;
+  margin-bottom: 20px;
+}
+
+p {
+  margin-bottom: 20px;
+}
+
+footer {
+  text-align: center;
+  margin-top: 40px;
+}
+
 .add-currencies {
-  .select,
-  .button {
-    margin: 30px 20px 0 0;
+  margin-bottom: 40px;
+
+  > select {
+    margin: 0 20px 20px 0;
   }
 }
 
 .currency {
   margin: 10px 0;
+
+  .control {
+    position: relative;
+  }
+
   .delete-icon {
-    padding-left: 0.75em;
-    padding-right: 0.75em;
-    float: left;
-    margin-bottom: 2px;
+    position: absolute;
+    bottom: 0px;
+    right: 0;
+    z-index: 1000;
+    height: 45px;
+    padding: 13px;
+    font-size: 25px;
   }
 
   &.fade-in {

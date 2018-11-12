@@ -50,15 +50,12 @@ class AddCurrency extends React.Component {
     return (
       <div className="add-currencies">
         <select
-          className="select is-primary is-medium"
+          className="select is-info is-medium"
           onChange={this.handleSelectChange}
         >
           {currencies}
         </select>
-        <button
-          className="button is-primary is-medium"
-          onClick={this.addCurrency}
-        >
+        <button className="button is-info is-medium" onClick={this.addCurrency}>
           Add currency
         </button>
       </div>
