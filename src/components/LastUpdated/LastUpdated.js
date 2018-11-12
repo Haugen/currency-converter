@@ -9,7 +9,7 @@ class LastUpdated extends React.Component {
 
     return (
       <>
-        <div className="message is-info">
+        <div className="message is-secondary">
           <p className="message-header">
             <strong>
               Exchange rates last fetched from{' '}
