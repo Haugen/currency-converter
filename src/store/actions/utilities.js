@@ -56,6 +56,8 @@ const handleConversion = (
 };
 
 export const addActiveCurrency = (currency, activeCurrencies) => {
+  console.log(currency);
+  console.log(activeCurrencies);
   let newCurrencyValue;
 
   if (activeCurrencies && Object.values(activeCurrencies)[0] !== undefined) {

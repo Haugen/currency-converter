@@ -2,6 +2,7 @@ import axios from 'axios';
 
 import * as actionTypes from './actionTypes';
 import { tryFetchDataFromFixer } from './fixer';
+import { addActiveCurrency } from './utilities';
 import {
   MINUTES_BETWEEN_UPDATES,
   FIREBASE_BASE_URL
@@ -55,6 +56,7 @@ export const tryFetchDataFromFirebase = () => {
             process.env.NODE_ENV === 'production' ||
             minutesSinceLastFetch < MINUTES_BETWEEN_UPDATES
           ) {
+            dispatch(addActiveCurrency({ currency: 'EUR', rate: 1 }));
             dispatch(fetchDataFromFirebaseSuccess(currencyData));
           } else {
             dispatch(tryFetchDataFromFixer());
