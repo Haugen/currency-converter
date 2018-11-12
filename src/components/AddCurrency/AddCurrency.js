@@ -2,6 +2,7 @@ import React from 'react';
 import { connect } from 'react-redux';
 
 import * as actionCreators from '../../store/actions/index';
+import { currencyMap } from '../../utility/currencyMap';
 
 class AddCurrency extends React.Component {
   state = {
@@ -9,7 +10,8 @@ class AddCurrency extends React.Component {
   };
 
   addCurrency = event => {
-    let target = this.state.currentTargetCurrency;
+    // Strip out the first three characters which are the currency code.
+    let target = this.state.currentTargetCurrency.substring(0, 3);
     let targetRate = this.props.allCurrencies.rates[target];
 
     // Just return if the target is not a valid currency or already active.
@@ -41,7 +43,7 @@ class AddCurrency extends React.Component {
       for (let [currency] of Object.entries(this.props.currencies)) {
         currencies.push(
           <option key={currency} id={currency}>
-            {currency}
+            {currency} - {currencyMap[currency]}
           </option>
         );
       }
