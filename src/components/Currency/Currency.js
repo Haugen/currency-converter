@@ -21,7 +21,7 @@ const Currency = props => {
                 className="input is-info is-medium"
                 onChange={props.handleChange}
                 id={props.name}
-                type="text"
+                type="number"
                 value={props.value}
               />
             </div>
