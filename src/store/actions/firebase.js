@@ -9,10 +9,12 @@ import {
 } from '../../utility/constants';
 
 export const saveDataToFirebase = data => {
-  return dispatch => {
-    axios.put(FIREBASE_BASE_URL + '/currency-data.json', data).catch(error => {
+  return async dispatch => {
+    try {
+      await axios.put(FIREBASE_BASE_URL + '/currency-data.json', data);
+    } catch (error) {
       dispatch(fetchDataFromFirebaseFail(error));
-    });
+    }
   };
 };
 
@@ -37,36 +39,36 @@ const fetchDataFromFirebaseFail = error => {
 };
 
 export const tryFetchDataFromFirebase = () => {
-  return dispatch => {
+  return async dispatch => {
     dispatch(fetchDataFromFirebaseStart());
 
-    axios
-      .get(FIREBASE_BASE_URL + '/currency-data.json')
-      .then(response => {
-        const currencyData = response.data;
+    try {
+      const response = await axios.get(
+        FIREBASE_BASE_URL + '/currency-data.json'
+      );
+      const currencyData = response.data;
 
-        if (currencyData) {
-          const minutesSinceLastFetch =
-            (Date.now() - currencyData.timestamp * 1000) / 1000 / 60;
+      if (currencyData) {
+        const minutesSinceLastFetch =
+          (Date.now() - currencyData.timestamp * 1000) / 1000 / 60;
 
-          if (
-            // OBS! Adding this now to alwayas keep fetching the data from Firebase in
-            // production. This is because Firebase doesn't allow me to fetch new data
-            // from Fixer without using https, which is not available in the free plan.
-            process.env.NODE_ENV === 'production' ||
-            minutesSinceLastFetch < MINUTES_BETWEEN_UPDATES
-          ) {
-            dispatch(addActiveCurrency({ currency: 'EUR', rate: 1 }));
-            dispatch(fetchDataFromFirebaseSuccess(currencyData));
-          } else {
-            dispatch(tryFetchDataFromFixer());
-          }
+        if (
+          // OBS! Adding this now to alwayas keep fetching the data from Firebase in
+          // production. This is because Firebase doesn't allow me to fetch new data
+          // from Fixer without using https, which is not available in the free plan.
+          process.env.NODE_ENV === 'production' ||
+          (minutesSinceLastFetch < MINUTES_BETWEEN_UPDATES && false)
+        ) {
+          dispatch(fetchDataFromFirebaseSuccess(currencyData));
         } else {
           dispatch(tryFetchDataFromFixer());
         }
-      })
-      .catch(error => {
-        dispatch(fetchDataFromFirebaseFail(error));
-      });
+        dispatch(addActiveCurrency({ currency: 'EUR', rate: 1 }));
+      } else {
+        dispatch(tryFetchDataFromFixer());
+      }
+    } catch (error) {
+      dispatch(fetchDataFromFirebaseFail(error));
+    }
   };
 };

@@ -29,21 +29,19 @@ const fetchDataFromFixerFail = error => {
 };
 
 export const tryFetchDataFromFixer = () => {
-  return dispatch => {
+  return async dispatch => {
     dispatch(fetchDataFromFixerStart());
 
-    axios
-      .get(
+    try {
+      const response = await axios.get(
         `${BASE_URL}latest?access_key=${API_KEY}&symbols=${CURRENCIES.join(
           ','
         )}`
-      )
-      .then(response => {
-        dispatch(saveDataToFirebase(response.data));
-        dispatch(fetchDataFromFixerSuccess(response.data));
-      })
-      .catch(error => {
-        dispatch(fetchDataFromFixerFail(error));
-      });
+      );
+      dispatch(saveDataToFirebase(response.data));
+      dispatch(fetchDataFromFixerSuccess(response.data));
+    } catch (error) {
+      dispatch(fetchDataFromFixerFail(error));
+    }
   };
 };
