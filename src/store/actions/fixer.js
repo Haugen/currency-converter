@@ -1,4 +1,5 @@
 import axios from 'axios';
+import { toast } from 'react-toastify';
 
 import * as actionTypes from './actionTypes';
 import { saveDataToFirebase } from './firebase';
@@ -22,6 +23,7 @@ const fetchDataFromFixerSuccess = currencyData => {
 };
 
 const fetchDataFromFixerFail = error => {
+  toast.error('Error fetching currencies. Please try again later.');
   return {
     type: actionTypes.FETCH_DATA_FROM_FIXER_FAIL,
     errorMessage: error.message

@@ -1,4 +1,5 @@
 import axios from 'axios';
+import { toast } from 'react-toastify';
 
 import * as actionTypes from './actionTypes';
 import { tryFetchDataFromFixer } from './fixer';
@@ -32,6 +33,7 @@ const fetchDataFromFirebaseSuccess = currencyData => {
 };
 
 const fetchDataFromFirebaseFail = error => {
+  toast.error('Error fetching currencies. Please try again later.');
   return {
     type: actionTypes.FETCH_DATA_FROM_FIREBASE_FAIL,
     errorMessage: error.message
@@ -57,13 +59,13 @@ export const tryFetchDataFromFirebase = () => {
           // production. This is because Firebase doesn't allow me to fetch new data
           // from Fixer without using https, which is not available in the free plan.
           process.env.NODE_ENV === 'production' ||
-          (minutesSinceLastFetch < MINUTES_BETWEEN_UPDATES && false)
+          minutesSinceLastFetch < MINUTES_BETWEEN_UPDATES
         ) {
+          dispatch(addActiveCurrency({ currency: 'EUR', rate: 1 }));
           dispatch(fetchDataFromFirebaseSuccess(currencyData));
         } else {
           dispatch(tryFetchDataFromFixer());
         }
-        dispatch(addActiveCurrency({ currency: 'EUR', rate: 1 }));
       } else {
         dispatch(tryFetchDataFromFixer());
       }

@@ -1,6 +1,8 @@
 import React, { Component } from 'react';
 import './App.scss';
 import { connect } from 'react-redux';
+import { ToastContainer, toast } from 'react-toastify';
+import 'react-toastify/dist/ReactToastify.css';
 
 import AddCurrency from './components/AddCurrency/AddCurrency';
 import LastUpdated from './components/LastUpdated/LastUpdated';
@@ -14,11 +16,15 @@ class App extends Component {
   }
 
   render() {
-    let rates, timestamp;
+    let rates, timestamp, lastUpdated;
 
     if (this.props.currenciesData) {
       rates = this.props.currenciesData.rates;
       timestamp = this.props.currenciesData.timestamp;
+    }
+
+    if (timestamp) {
+      lastUpdated = <LastUpdated timestamp={timestamp} />;
     }
 
     return (
@@ -27,7 +33,7 @@ class App extends Component {
           <div className="App">
             <div className="section">
               <h1>Currency Converter</h1>
-              <LastUpdated timestamp={timestamp} />
+              {lastUpdated}
               <p>
                 Using Euro as base rate. Add more currencies below and update
                 the values in the textfields to instantly compare two or more
@@ -36,6 +42,7 @@ class App extends Component {
               <AddCurrency currencies={rates} />
               <ActiveCurrencies />
               <Footer />
+              <ToastContainer position={toast.POSITION.BOTTOM_CENTER} />
             </div>
           </div>
         )}
@@ -47,7 +54,9 @@ class App extends Component {
 const mapStateToProps = state => {
   return {
     currenciesData: state.currenciesData,
-    loading: state.loading
+    loading: state.loading,
+    error: state.error,
+    errorMEssage: state.errorMEssage
   };
 };
 
