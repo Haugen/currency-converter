@@ -6,7 +6,7 @@ export const handleInputChange = (event, currenciesData, activeCurrencies) => {
     const targetCurrency = event.target.id;
     const targetvalue = event.target.value;
 
-    if (!isNaN(Number(targetvalue))) {
+    if (!Number.isNaN(Number(targetvalue))) {
       dispatch(
         handleConversion(
           targetCurrency,
